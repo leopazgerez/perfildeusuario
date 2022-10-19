@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 
-class UserProfile extends StatelessWidget {
-  const UserProfile({Key? key}) : super(key: key);
+import '../../models/person_model.dart';
 
+class UserProfile extends StatelessWidget {
+   const UserProfile({Key? key, this.personModel}) : super(key: key);
+  final PersonModel? personModel;
   @override
   Widget build(BuildContext context) {
     return Form(
