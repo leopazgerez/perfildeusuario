@@ -5,9 +5,19 @@ class UserProfile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      height: 300,
-      width: 300,
+    return Form(
+      child: Column(
+        children: [
+          _top(),
+          _bottom(),
+        ],
+      ),
     );
+  }
+  Widget _top(){
+    return Container();
+  }
+  Widget _bottom(){
+    return Container();
   }
 }
