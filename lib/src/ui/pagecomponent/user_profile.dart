@@ -1,13 +1,23 @@
 import 'package:flutter/material.dart';
+import 'package:perfildeusuario/src/models/person_model.dart';
 
 class UserProfile extends StatefulWidget {
-  const UserProfile({Key? key}) : super(key: key);
+  final PersonModel? model;
+  const UserProfile({Key? key, this.model}) : super(key: key);
   @override
   State<UserProfile> createState() => _UserProfileState();
 }
 
 class _UserProfileState extends State<UserProfile> {
-
+  TextEditingController nameAndSurnameController = TextEditingController();
+  TextEditingController emailController = TextEditingController();
+  TextEditingController dniController = TextEditingController();
+  List<String> locationList = [
+    'Salta',
+    'Joaquin V. Gonzalez',
+    'Quebrachal',
+    'Metan'
+  ];
   @override
   Widget build(BuildContext context) {
     return Form(
@@ -24,29 +34,52 @@ class _UserProfileState extends State<UserProfile> {
     String dropdownValue = 'Salta';
     return Column(
       children: [
-        Row(
-          children: const [
-            Padding(
-              padding: EdgeInsets.symmetric(vertical: 8.0),
-              child: Text("Nombre y apellido"),
+        Column(
+          children: [
+            Row(
+              children: const [
+                Padding(
+                  padding: EdgeInsets.symmetric(vertical: 8.0),
+                  child: Text(
+                    "Editar perfil",
+                    style: TextStyle(fontSize: 16),
+                  ),
+                ),
+              ],
+            ),
+            Row(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 8.0),
+                  child: Text(
+                    "Nombre y apellido",
+                    style: TextStyle(color: Colors.grey.shade800),
+                  ),
+                ),
+              ],
             ),
           ],
         ),
         TextFormField(
-          decoration: const InputDecoration(
-              enabledBorder: OutlineInputBorder(),
-              hintText: 'Nombre y pellido'
-              ),
+          controller: nameAndSurnameController,
+          decoration: InputDecoration(
+              enabledBorder: const OutlineInputBorder(),
+              hintText:
+                  (widget.model?.name != null && widget.model?.surname != null)
+                      ? '${widget.model!.name} ${widget.model!.surname}'
+                      : 'Nombre y apellido'),
         ),
         Row(
-          children: const [
+          children: [
             Padding(
-              padding: EdgeInsets.symmetric(vertical: 8.0),
-              child: Text("Email"),
+              padding: const EdgeInsets.symmetric(vertical: 8.0),
+              child:
+                  Text("Email", style: TextStyle(color: Colors.grey.shade800)),
             ),
           ],
         ),
         TextFormField(
+          controller: emailController,
           keyboardType: TextInputType.emailAddress,
           validator: (email) {
             if (email == null || email.isEmpty) {
@@ -57,20 +90,21 @@ class _UserProfileState extends State<UserProfile> {
             if (!regex.hasMatch(email)) return 'Formato Incorrecto de E-mail';
             return null;
           },
-          decoration: const InputDecoration(
-            enabledBorder: OutlineInputBorder(),
-            hintText: 'Email',
+          decoration: InputDecoration(
+            enabledBorder: const OutlineInputBorder(),
+            hintText: widget.model?.email ?? 'Email',
           ),
         ),
         Row(
-          children: const [
+          children: [
             Padding(
-              padding: EdgeInsets.symmetric(vertical: 8.0),
-              child: Text("DNI"),
+              padding: const EdgeInsets.symmetric(vertical: 8.0),
+              child: Text("DNI", style: TextStyle(color: Colors.grey.shade800)),
             ),
           ],
         ),
         TextFormField(
+          controller: dniController,
           keyboardType: TextInputType.number,
           validator: (dni) {
             if (dni == null || dni.isEmpty) {
@@ -80,26 +114,29 @@ class _UserProfileState extends State<UserProfile> {
             }
             return null;
           },
-          decoration: const InputDecoration(
-              enabledBorder: OutlineInputBorder(), labelText: 'DNI'),
+          decoration: InputDecoration(
+            enabledBorder: const OutlineInputBorder(),
+            hintText: widget.model?.dni.toString() ?? 'DNI',
+          ),
         ),
         Row(
-          children: const [
+          children: [
             Padding(
-              padding: EdgeInsets.symmetric(vertical: 8.0),
-              child: Text("Localidad"),
+              padding: const EdgeInsets.symmetric(vertical: 8.0),
+              child: Text("Localidad",
+                  style: TextStyle(color: Colors.grey.shade800)),
             ),
           ],
         ),
         DropdownButtonFormField(
+          icon: const Icon(Icons.arrow_drop_down_sharp),
           value: dropdownValue,
           onChanged: (String? newValue) {
             setState(() {
               dropdownValue = newValue!;
             });
           },
-          items: <String>['Salta', 'Joaquin V. Gonzalez', 'Quebrachal', 'Metan']
-              .map<DropdownMenuItem<String>>((String value) {
+          items: locationList.map<DropdownMenuItem<String>>((String value) {
             return DropdownMenuItem<String>(
               value: value,
               child: Text(
@@ -117,4 +154,3 @@ class _UserProfileState extends State<UserProfile> {
     return Container();
   }
 }
-
