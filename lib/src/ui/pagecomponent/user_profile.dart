@@ -7,7 +7,6 @@ class UserProfile extends StatefulWidget {
 }
 
 class _UserProfileState extends State<UserProfile> {
-  List<String> list = <String>['One', 'Two', 'Three', 'Four'];
 
   @override
   Widget build(BuildContext context) {
@@ -25,13 +24,27 @@ class _UserProfileState extends State<UserProfile> {
     String dropdownValue = 'Salta';
     return Column(
       children: [
+        Row(
+          children: const [
+            Padding(
+              padding: EdgeInsets.symmetric(vertical: 8.0),
+              child: Text("Nombre y apellido"),
+            ),
+          ],
+        ),
         TextFormField(
           decoration: const InputDecoration(
               enabledBorder: OutlineInputBorder(),
-              labelText: 'Nombre y pellido'),
+              hintText: 'Nombre y pellido'
+              ),
         ),
-        const SizedBox(
-          height: 20,
+        Row(
+          children: const [
+            Padding(
+              padding: EdgeInsets.symmetric(vertical: 8.0),
+              child: Text("Email"),
+            ),
+          ],
         ),
         TextFormField(
           keyboardType: TextInputType.emailAddress,
@@ -46,11 +59,16 @@ class _UserProfileState extends State<UserProfile> {
           },
           decoration: const InputDecoration(
             enabledBorder: OutlineInputBorder(),
-            labelText: 'Email',
+            hintText: 'Email',
           ),
         ),
-        const SizedBox(
-          height: 20,
+        Row(
+          children: const [
+            Padding(
+              padding: EdgeInsets.symmetric(vertical: 8.0),
+              child: Text("DNI"),
+            ),
+          ],
         ),
         TextFormField(
           keyboardType: TextInputType.number,
@@ -65,8 +83,13 @@ class _UserProfileState extends State<UserProfile> {
           decoration: const InputDecoration(
               enabledBorder: OutlineInputBorder(), labelText: 'DNI'),
         ),
-        const SizedBox(
-          height: 20,
+        Row(
+          children: const [
+            Padding(
+              padding: EdgeInsets.symmetric(vertical: 8.0),
+              child: Text("Localidad"),
+            ),
+          ],
         ),
         DropdownButtonFormField(
           value: dropdownValue,
