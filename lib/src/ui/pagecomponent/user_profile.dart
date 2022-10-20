@@ -22,16 +22,50 @@ class _UserProfileState extends State<UserProfile> {
   final double paddingHorizontal = 16;
   final double borderRadiusTextForm = 12;
   final double sizeTextForm = 14;
+  bool isEnabled = false;
   String dropDownValue = '';
-
   bool iconEyeNewPassword = false;
   bool iconEyeConfirmPassword = false;
 
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
-  
+
   TextEditingController newPasswordController = TextEditingController();
   TextEditingController confirmPasswordController = TextEditingController();
+  TextEditingController nameAndSurnameController = TextEditingController();
+  TextEditingController emailController = TextEditingController();
+  TextEditingController dniController = TextEditingController();
+  TextEditingController phoneController = TextEditingController();
 
+@override
+void initState(){
+  super.initState();
+  newPasswordController.addListener(() {
+    isEnabled = newPasswordController.text.isNotEmpty;
+  });
+  confirmPasswordController.addListener(() {
+    isEnabled = confirmPasswordController.text.isNotEmpty;
+  });
+  nameAndSurnameController.addListener(() {
+    isEnabled = nameAndSurnameController.text.isNotEmpty;
+  });
+  emailController.addListener(() {
+    isEnabled = emailController.text.isNotEmpty;
+  });
+  dniController.addListener(() {
+    isEnabled = dniController.text.isNotEmpty;
+  });
+  phoneController.addListener(() {
+    isEnabled = phoneController.text.isNotEmpty;
+  });
+}
+@override
+void dispose(){
+  nameAndSurnameController.dispose();
+  emailController.dispose();
+  dniController.dispose();
+  phoneController.dispose();
+  newPasswordController.dispose();
+}
   isTapIconEyeNewPassword() {
     iconEyeNewPassword = !iconEyeNewPassword;
   }
@@ -64,6 +98,13 @@ class _UserProfileState extends State<UserProfile> {
       return 'Contraseña requerida';
     } else if (newPassword.length < 8) {
       return 'Debe tener un minimo de 8 caracteres';
+    }
+    return null;
+  }
+
+  String? nameValidator(name) {
+    if (name == null || name.isEmpty) {
+      return 'Nombre y apellido requerido';
     }
     return null;
   }
@@ -116,27 +157,32 @@ class _UserProfileState extends State<UserProfile> {
           ),
           _customTitleTextForm(title: "Nombre y apellido"),
           _customTextFormField(
+            controller: nameAndSurnameController,
               hintText: "Adoración Rosa...",
-              initialValue: "${widget.model!.name} ${widget.model!.surname}"),
+              // initialValue: "${widget.model!.name} ${widget.model!.surname}",
+          validator: nameValidator),
           _customTitleTextForm(title: "Email"),
           _customTextFormField(
+            controller: emailController,
             hintText: "adoracion.rosa@gmail.com...",
             keyboardType: TextInputType.emailAddress,
-            initialValue: widget.model!.email,
+            // initialValue: widget.model!.email,
             validator: emailValidator,
           ),
           _customTitleTextForm(title: "DNI"),
           _customTextFormField(
+            controller: dniController,
               hintText: "9.955.976...",
-              initialValue: widget.model!.dni.toString(),
+              // initialValue: widget.model!.dni.toString(),
               keyboardType: TextInputType.number,
               validator: dniValidator),
           _customTitleTextForm(title: "Localidad"),
           _customDropDownButton(locationList, widget.model!.location),
           _customTitleTextForm(title: "Celular"),
           _customTextFormField(
+            controller: phoneController,
               hintText: "387678953...",
-              initialValue: widget.model!.phoneNumber.toString(),
+              // initialValue: widget.model!.phoneNumber.toString(),
               keyboardType: TextInputType.number),
           _customTitleTextForm(title: "Cambiar contraseña"),
           _customTextFormFieldWithIcons(
@@ -161,7 +207,7 @@ class _UserProfileState extends State<UserProfile> {
           ),
           _customButton(
             text: "Guardar",
-            backgroundColor: const Color(0xFF0000CC),
+            backgroundColor: isEnabled ? const Color(0xFF0000CC) : Colors.grey,
             height: 36,
             width: 300,
             textSize: 16,
@@ -173,29 +219,33 @@ class _UserProfileState extends State<UserProfile> {
     );
   }
 
-  Widget _customButton(
-      {String? text = "",
-      Color? backgroundColor = const Color(0xFF0000FF),
-      double? height = 30,
-      double? width = 200,
-      double? textSize = 20,
-      FontWeight? textWeight = FontWeight.w500,
-      double? letterSpacing = 3}) {
+  Widget _customButton({
+    String? text = "",
+    Color? backgroundColor = const Color(0xFF0000FF),
+    double? height = 30,
+    double? width = 200,
+    double? textSize = 20,
+    FontWeight? textWeight = FontWeight.w500,
+    double? letterSpacing = 3,
+  }) {
     return Center(
       child: Container(
         margin: const EdgeInsets.only(top: 20),
         child: CustomButton(
           width: width!,
           text: text!,
-          onTap: () {
+          onTap: isEnabled ? () {
             setState(() {
+              isEnabled = true;
               if (formKey.currentState!.validate()) {
+                // isEnabled = true;
                 print("OOOOOK");
               } else {
+                // isEnabled = false;
                 print("Noooo OK");
               }
             });
-          },
+          } : null,
           backgroundColor: backgroundColor!,
           height: height!,
           textSize: textSize!,
@@ -216,6 +266,7 @@ class _UserProfileState extends State<UserProfile> {
       ),
     );
   }
+
   Widget _customTextFormFieldWithIcons({
     required String hintText,
     TextInputType? keyboardType = TextInputType.text,
@@ -246,8 +297,7 @@ class _UserProfileState extends State<UserProfile> {
         horizontal: paddingHorizontal,
         vertical: paddingVertical,
       ),
-      child: Row(
-        children: [
+      child: Row(children: [
         Expanded(
           child: TextFormField(
             validator: validator,
@@ -300,6 +350,7 @@ class _UserProfileState extends State<UserProfile> {
     bool? obscureText,
     String? Function(String?)? validator,
     double? fontSize = 14,
+    TextEditingController? controller,
   }) {
     return Container(
       margin: const EdgeInsets.symmetric(vertical: 12),
@@ -312,6 +363,7 @@ class _UserProfileState extends State<UserProfile> {
         vertical: 10,
       ),
       child: TextFormField(
+        controller: controller,
         keyboardType: keyboardType,
         initialValue: initialValue,
         style: TextStyle(fontSize: fontSize),
