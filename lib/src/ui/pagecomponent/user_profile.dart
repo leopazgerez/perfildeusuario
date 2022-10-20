@@ -118,6 +118,7 @@ class _UserProfileState extends State<UserProfile> {
                 vertical: 8,
               ),
               child: DropdownButtonFormField(
+                borderRadius: BorderRadius.circular(12),
                 decoration: const InputDecoration.collapsed(
                     hintText: 'hit'
                 ),
