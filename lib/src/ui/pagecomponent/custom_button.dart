@@ -18,7 +18,7 @@ class CustomButton extends StatefulWidget {
   final String? iconPath;
   final Color borderColor;
   final double borderWidth;
-
+  final double letterSpacing;
   CustomButton({
     super.key,
     required this.text,
@@ -36,6 +36,7 @@ class CustomButton extends StatefulWidget {
     this.iconColor = Colors.white,
     this.textSize,
     this.iconSize,
+    this.letterSpacing = 3,
   });
 
   @override
@@ -120,7 +121,7 @@ class _CustomButtonState extends State<CustomButton> {
         fontWeight: widget.textWeight,
         color: widget.textColor,
         fontSize: widget.textSize ?? (widget.height / 2),
-        letterSpacing: 3,
+        letterSpacing: widget.letterSpacing,
       ),
     );
   }

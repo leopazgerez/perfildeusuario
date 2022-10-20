@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:perfildeusuario/src/models/person_model.dart';
+import 'package:perfildeusuario/src/ui/pagecomponent/custom_button.dart';
 
 class UserProfile extends StatefulWidget {
   final PersonModel? model;
@@ -15,6 +16,10 @@ class _UserProfileState extends State<UserProfile> {
   TextEditingController nameAndSurnameController = TextEditingController();
   TextEditingController emailController = TextEditingController();
   TextEditingController dniController = TextEditingController();
+  final double paddingVertical = 8;
+  final double paddingHorizontal = 16;
+  final double borderRadiusTextForm = 12;
+  final double sizeTextForm = 14;
   List<String> locationList = [
     'Salta',
     'Joaquin V. Gonzalez',
@@ -31,80 +36,39 @@ class _UserProfileState extends State<UserProfile> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            //_top(),
+            _top(),
             //_bottom(),
             _titleTextForm("Celular"),
             _textFormField(numberPhone, "387678953.."),
             _titleTextForm("Cambiar contraseña"),
-            _textFormField("","Nueva contraseña"),
-            Container(
-              margin: const EdgeInsets.symmetric(vertical: 12),
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(12),
-              ),
-              padding: const EdgeInsets.symmetric(
-                horizontal: 16,
-                vertical: 10,
-              ),
-              child: TextFormField(
-                keyboardType: TextInputType.text,
-                obscureText: true,
-                /*
-                decoration: const InputDecoration.collapsed(
-                  hintText: "Nueva contraseña",
-                  hintStyle: TextStyle(
-                    fontWeight: FontWeight.w500,
-                    fontSize: 14,
-                  ),
-                ),*/
-                decoration: InputDecoration(
-                  isCollapsed: true,
-                  contentPadding: EdgeInsets.zero,
-                  border: InputBorder.none,
-                  hintText: "Nueva contraseña",
-                  hintStyle: const TextStyle(
-                    fontWeight: FontWeight.w500,
-                    fontSize: 14,
-                  ),
-                  suffixIcon: SizedBox(
-                    width: 52,
-                    child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: const [
-                          Icon(Icons.info_outline),
-                          Icon(Icons.remove_red_eye_outlined),
-                        ]),
-                  ),
-                ),
-              ),
-            ),
-            Container(
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(12),
-              ),
-              padding: const EdgeInsets.symmetric(
-                horizontal: 16,
-                vertical: 10,
-              ),
-              child: TextFormField(
-                keyboardType: TextInputType.text,
-                obscureText: true,
-                decoration: const InputDecoration.collapsed(
-                  hintText: "Repetir contraseña nueva",
-                  hintStyle: TextStyle(
-                    fontWeight: FontWeight.w500,
-                    fontSize: 14,
-                  ),
-                ),
-              ),
-            ),
+            _customTextFormField("", "Nueva contraseña", TextInputType.text, obscureText: true, iconInfo: true, iconEye: true),
+            _customTextFormField("", "Repetir contraseña nueva", TextInputType.text, obscureText: true, iconEye: true),
+            _customButton(
+                "Guardar", const Color(0xFF0000CC), 36, 16, FontWeight.w500, 1),
           ],
         ),
       ),
     );
   }
+
+  Widget _customButton(
+      text, backgroundColor, height, textSize, textWeight, letterSpacing) {
+    return Center(
+      child: Container(
+        margin: const EdgeInsets.only(top: 20),
+        child: CustomButton(
+          text: "Guardar",
+          onTap: () {},
+          backgroundColor: const Color(0xFF0000CC),
+          height: 36,
+          textSize: 16,
+          textWeight: FontWeight.w500,
+          letterSpacing: 1,
+        ),
+      ),
+    );
+  }
+
   Widget _titleTextForm(String title) {
     return Text(
       title,
@@ -116,7 +80,87 @@ class _UserProfileState extends State<UserProfile> {
     );
   }
 
-  Widget _textFormField(String initialValue, String hintText, {bool? obscureText}) {
+  IconButton _iconButton(icon, onPressed) {
+    return IconButton(
+      
+      hoverColor: Colors.transparent,
+      splashColor: Colors.transparent,
+      color: Colors.grey.shade600,
+      highlightColor: Colors.transparent,
+      icon: Icon(icon),
+      onPressed: onPressed,
+    );
+  }
+
+  Widget _customTextFormField(
+      String initialValue, String hintText, keyboardType ,{bool? obscureText, bool? iconInfo, bool? iconEye}) {
+    return Container(
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(borderRadiusTextForm),
+      ),
+      margin: const EdgeInsets.symmetric(vertical: 6),
+      padding: EdgeInsets.symmetric(
+        horizontal: paddingHorizontal,
+        vertical: paddingVertical,
+      ),
+      child: Row(children: [
+        Expanded(
+          child: TextFormField(
+            initialValue: initialValue,
+            keyboardType: keyboardType,
+            obscureText: obscureText != null,
+            decoration: InputDecoration.collapsed(
+              hintText: hintText,
+              hintStyle: TextStyle(
+                fontWeight: FontWeight.w500,
+                fontSize: sizeTextForm,
+              ),
+            ),
+          ),
+        ),
+        Visibility(
+          visible: iconInfo != null,
+          child: _iconButton(
+            
+            Icons.info_outline,
+            () {},
+          ),
+        ),
+        Visibility(
+          visible: iconEye != null,
+          child: _iconButton(Icons.remove_red_eye_outlined, () {}),)
+      ]),
+    );
+  }
+
+  Widget _tFField() {
+    return Container(
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(12),
+      ),
+      margin: const EdgeInsets.symmetric(vertical: 6),
+      padding: const EdgeInsets.symmetric(
+        horizontal: 16,
+        vertical: 10,
+      ),
+      child: TextFormField(
+        keyboardType: TextInputType.text,
+        obscureText: true,
+        decoration: const InputDecoration.collapsed(
+          hintText: "Repetir contraseña nueva",
+          hintStyle: TextStyle(
+            fontWeight: FontWeight.w500,
+            fontSize: 14,
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _textFormField(String initialValue, String hintText,
+      {bool? obscureText}) {
     return Container(
       margin: const EdgeInsets.symmetric(vertical: 12),
       decoration: BoxDecoration(
@@ -159,6 +203,7 @@ class _UserProfileState extends State<UserProfile> {
       ),
     ];
   }
+
   Widget _top() {
     String dropdownValue = 'Salta';
     return Column(
@@ -279,3 +324,50 @@ class _UserProfileState extends State<UserProfile> {
     );
   }
 }
+/*
+/*
+            Container(
+              margin: const EdgeInsets.symmetric(vertical: 12),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(12),
+              ),
+              padding: const EdgeInsets.symmetric(
+                horizontal: 16,
+                vertical: 10,
+              ),
+              child: TextFormField(
+                keyboardType: TextInputType.text,
+                obscureText: true,
+                ///
+                decoration: const InputDecoration.collapsed(
+                  hintText: "Nueva contraseña",
+                  hintStyle: TextStyle(
+                    fontWeight: FontWeight.w500,
+                    fontSize: 14,
+                  ),
+                ),
+                ///
+                decoration: InputDecoration(
+                  isCollapsed: true,
+                  contentPadding: EdgeInsets.zero,
+                  border: InputBorder.none,
+                  hintText: "Nueva contraseña",
+                  hintStyle: const TextStyle(
+                    fontWeight: FontWeight.w500,
+                    fontSize: 14,
+                  ),
+                  suffixIcon: SizedBox(
+                    width: 52,
+                    child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: const [
+                          Icon(Icons.info_outline),
+                          Icon(Icons.remove_red_eye_outlined),
+                        ]),
+                  ),
+                ),
+              ),
+            ),
+            */
+ */
