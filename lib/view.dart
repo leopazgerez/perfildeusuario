@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:perfildeusuario/src/models/person_model.dart';
 import 'package:perfildeusuario/src/ui/pagecomponent/user_profile.dart';
 
 class View extends StatelessWidget {
@@ -8,7 +9,7 @@ class View extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.grey.shade500,
+      backgroundColor: Colors.grey.shade300,
       appBar: AppBar(
         title: const Text("Vista"),
       ),

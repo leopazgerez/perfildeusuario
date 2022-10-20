@@ -10,12 +10,10 @@ class UserProfile extends StatefulWidget {
 }
 
 class _UserProfileState extends State<UserProfile> {
-  final numberPhoneController = TextEditingController();
   final numberPhone = "3877777";
   final currentPassword = "pass";
-  TextEditingController nameAndSurnameController = TextEditingController();
-  TextEditingController emailController = TextEditingController();
-  TextEditingController dniController = TextEditingController();
+  final nameAndSurname = 'Ana Paz';
+  final email = 'example@gmail.com';
   final double paddingVertical = 8;
   final double paddingHorizontal = 16;
   final double borderRadiusTextForm = 12;
@@ -26,9 +24,47 @@ class _UserProfileState extends State<UserProfile> {
     'Quebrachal',
     'Metan'
   ];
+
+  final GlobalKey<FormState> formKey = GlobalKey<FormState>();
+  bool isTapIcon = true;
+  bool iconEyeNewPassword = false;
+  bool iconEyeConfirmPassword = false;
+
+  isTapIconf() {
+    isTapIcon = !isTapIcon;
+  }
+
+  isTapIconEyeNewPassword() {
+    iconEyeNewPassword = !iconEyeNewPassword;
+  }
+
+  isTapIconEyeConfirmPassword() {
+    iconEyeConfirmPassword = !iconEyeConfirmPassword;
+  }
+
+  String? emailValidator(email) {
+    if (email == null || email.isEmpty) {
+      return 'E-mail es requerido';
+    }
+    String pattern = r'\w+@\w+\.\w+';
+    RegExp regex = RegExp(pattern);
+    if (!regex.hasMatch(email)) return 'Formato Incorrecto de E-mail';
+    return null;
+  }
+
+  String? dniValidator(dni) {
+    if (dni == null || dni.isEmpty) {
+      return 'DNI es requerido';
+    } else if (dni.length > 9 && dni.length < 12) {
+      return 'DNI es incorrecto';
+    }
+    return null;
+  }
+
   @override
   Widget build(BuildContext context) {
-    GlobalKey<FormState> formKey = GlobalKey<FormState>();
+    IconData icon =
+        isTapIcon ? Icons.visibility_outlined : Icons.visibility_off_outlined;
     return Form(
       key: formKey,
       child: Padding(
@@ -36,13 +72,55 @@ class _UserProfileState extends State<UserProfile> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            _top(),
-            //_bottom(),
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 10),
+              child: _customTitleTextForm(
+                title: "Editar perfil",
+                fontSize: 18,
+              ),
+            ),
+            _customTitleTextForm(title: "Nombre y apellido"),
+            _customTextFormField(
+                hintText: "Nombre y apellido", initialValue: nameAndSurname),
+            _titleTextForm("Email"),
+            _customTextFormField(
+                hintText: "Email",
+                keyboardType: TextInputType.emailAddress,
+                initialValue: email,
+                validator: emailValidator,
+            ),
+            /*
+            _textFormField(email, "Email", TextInputType.emailAddress,
+                validator: (email) {
+              if (email == null || email.isEmpty) {
+                return 'E-mail es requerido';
+              }
+              String pattern = r'\w+@\w+\.\w+';
+              RegExp regex = RegExp(pattern);
+              if (!regex.hasMatch(email)) return 'Formato Incorrecto de E-mail';
+              return null;
+            }),
+            */
+            _customTitleTextForm(title: "DNI"),
+            _customTextFormField(hintText: "9.955.976.."),
+            _titleTextForm("Localidad"),
+            _textFormField(
+                "", "Aquí va el dropwond **********", TextInputType.text),
             _titleTextForm("Celular"),
-            _textFormField(numberPhone, "387678953.."),
+            _textFormField(numberPhone, "387678953..", TextInputType.number),
             _titleTextForm("Cambiar contraseña"),
-            _customTextFormField("", "Nueva contraseña", TextInputType.text, obscureText: true, iconInfo: true, iconEye: true),
-            _customTextFormField("", "Repetir contraseña nueva", TextInputType.text, obscureText: true, iconEye: true),
+            _customTextFormFieldIE("", "Nueva contraseña", TextInputType.text,
+                () {
+              setState(() {
+                isTapIconEyeNewPassword();
+              });
+            }, iconInfo: true, iconEye: true, isTapIcon: iconEyeNewPassword),
+            _customTextFormFieldIE(
+                "", "Repetir contraseña nueva", TextInputType.text, () {
+              setState(() {
+                isTapIconEyeConfirmPassword();
+              });
+            }, iconEye: true, isTapIcon: iconEyeConfirmPassword),
             _customButton(
                 "Guardar", const Color(0xFF0000CC), 36, 16, FontWeight.w500, 1),
           ],
@@ -57,8 +135,17 @@ class _UserProfileState extends State<UserProfile> {
       child: Container(
         margin: const EdgeInsets.only(top: 20),
         child: CustomButton(
+          width: 250,
           text: "Guardar",
-          onTap: () {},
+          onTap: () {
+            setState(() {
+              if (formKey.currentState!.validate()) {
+                print("OOOOOK");
+              } else {
+                print("Noooo OK");
+              }
+            });
+          },
           backgroundColor: const Color(0xFF0000CC),
           height: 36,
           textSize: 16,
@@ -69,31 +156,38 @@ class _UserProfileState extends State<UserProfile> {
     );
   }
 
-  Widget _titleTextForm(String title) {
+  Widget _customTitleTextForm({required String title, double? fontSize = 14}) {
     return Text(
       title,
       style: TextStyle(
-        fontWeight: FontWeight.w700,
-        fontSize: 14,
-        color: Colors.grey.shade800,
+        fontWeight: FontWeight.w500,
+        fontSize: fontSize,
+        color: Colors.grey.shade700,
       ),
     );
   }
 
-  IconButton _iconButton(icon, onPressed) {
-    return IconButton(
-      
-      hoverColor: Colors.transparent,
-      splashColor: Colors.transparent,
-      color: Colors.grey.shade600,
-      highlightColor: Colors.transparent,
-      icon: Icon(icon),
-      onPressed: onPressed,
+  Widget _titleTextForm(String title) {
+    return Text(
+      title,
+      style: TextStyle(
+        fontWeight: FontWeight.w500,
+        fontSize: 14,
+        color: Colors.grey.shade700,
+      ),
     );
   }
 
-  Widget _customTextFormField(
-      String initialValue, String hintText, keyboardType ,{bool? obscureText, bool? iconInfo, bool? iconEye}) {
+  Widget _customTextFormFieldIE(
+      String initialValue, String hintText, keyboardType, onTap,
+      {bool? iconInfo, bool? iconEye, bool? isTapIcon}) {
+    IconData icon = Icons.visibility_outlined;
+    if (isTapIcon != null) {
+      icon =
+          isTapIcon ? Icons.visibility_outlined : Icons.visibility_off_outlined;
+    }
+    //bool? obscureText
+    bool obscureText = !isTapIcon!;
     return Container(
       decoration: BoxDecoration(
         color: Colors.white,
@@ -109,7 +203,7 @@ class _UserProfileState extends State<UserProfile> {
           child: TextFormField(
             initialValue: initialValue,
             keyboardType: keyboardType,
-            obscureText: obscureText != null,
+            obscureText: obscureText,
             decoration: InputDecoration.collapsed(
               hintText: hintText,
               hintStyle: TextStyle(
@@ -121,46 +215,118 @@ class _UserProfileState extends State<UserProfile> {
         ),
         Visibility(
           visible: iconInfo != null,
-          child: _iconButton(
-            
-            Icons.info_outline,
-            () {},
+          child: GestureDetector(
+            child: Icon(
+              Icons.info_outline,
+              size: 20,
+              color: Colors.grey.shade600,
+            ),
+            onTap: () {
+              const snackBar = SnackBar(
+                content: Text('Ingrese su nueva contraseña'),
+              );
+              ScaffoldMessenger.of(context).showSnackBar(snackBar);
+            },
           ),
+        ),
+        const SizedBox(
+          width: 6,
         ),
         Visibility(
           visible: iconEye != null,
-          child: _iconButton(Icons.remove_red_eye_outlined, () {}),)
+          child: GestureDetector(
+            onTap: onTap,
+            child: Icon(
+              icon,
+              size: 20,
+              color: Colors.grey.shade600,
+            ),
+          ),
+        )
       ]),
     );
   }
-
-  Widget _tFField() {
+  Widget _customTextFormFieldDDD({
+    required String hintText,
+    TextInputType? keyboardType,
+    String? initialValue,
+    void Function()? onTapInfo,
+    void Function()? onTapEye,
+    bool? iconInfo, bool? iconEye, bool? isTapIcon}
+    ) {
+    IconData icon = Icons.visibility_outlined;
+    if (isTapIcon != null) {
+      icon =
+          isTapIcon ? Icons.visibility_outlined : Icons.visibility_off_outlined;
+    }
+    //bool? obscureText
+    bool obscureText = !isTapIcon!;
     return Container(
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: BorderRadius.circular(borderRadiusTextForm),
       ),
       margin: const EdgeInsets.symmetric(vertical: 6),
-      padding: const EdgeInsets.symmetric(
-        horizontal: 16,
-        vertical: 10,
+      padding: EdgeInsets.symmetric(
+        horizontal: paddingHorizontal,
+        vertical: paddingVertical,
       ),
-      child: TextFormField(
-        keyboardType: TextInputType.text,
-        obscureText: true,
-        decoration: const InputDecoration.collapsed(
-          hintText: "Repetir contraseña nueva",
-          hintStyle: TextStyle(
-            fontWeight: FontWeight.w500,
-            fontSize: 14,
+      child: Row(children: [
+        Expanded(
+          child: TextFormField(
+            initialValue: initialValue,
+            keyboardType: keyboardType,
+            obscureText: obscureText,
+            decoration: InputDecoration.collapsed(
+              hintText: hintText,
+              hintStyle: TextStyle(
+                fontWeight: FontWeight.w500,
+                fontSize: sizeTextForm,
+              ),
+            ),
           ),
         ),
-      ),
+        Visibility(
+          visible: iconInfo != null,
+          child: GestureDetector(
+            child: Icon(
+              Icons.info_outline,
+              size: 20,
+              color: Colors.grey.shade600,
+            ),
+            onTap: () {
+              const snackBar = SnackBar(
+                content: Text('Ingrese su nueva contraseña'),
+              );
+              ScaffoldMessenger.of(context).showSnackBar(snackBar);
+            },
+          ),
+        ),
+        const SizedBox(
+          width: 6,
+        ),
+        Visibility(
+          visible: iconEye != null,
+          child: GestureDetector(
+            onTap: onTapEye,
+            child: Icon(
+              icon,
+              size: 20,
+              color: Colors.grey.shade600,
+            ),
+          ),
+        )
+      ]),
     );
   }
-
-  Widget _textFormField(String initialValue, String hintText,
-      {bool? obscureText}) {
+  Widget _customTextFormField({
+    required String hintText,
+    String? initialValue,
+    TextInputType? keyboardType = TextInputType.text,
+    bool? obscureText,
+    String? Function(String?)? validator,
+    double? fontSize = 14,
+  }) {
     return Container(
       margin: const EdgeInsets.symmetric(vertical: 12),
       decoration: BoxDecoration(
@@ -172,8 +338,39 @@ class _UserProfileState extends State<UserProfile> {
         vertical: 10,
       ),
       child: TextFormField(
-        keyboardType: TextInputType.number,
+        keyboardType: keyboardType,
         initialValue: initialValue,
+        style: TextStyle(fontSize: fontSize),
+        obscureText: !(obscureText == null),
+        decoration: InputDecoration.collapsed(
+          hintText: hintText,
+          hintStyle: TextStyle(
+            fontWeight: FontWeight.w500,
+            fontSize: fontSize,
+          ),
+        ),
+        validator: validator,
+      ),
+    );
+  }
+
+  Widget _textFormField(
+      String initialValue, String hintText, TextInputType keyboardType,
+      {bool? obscureText, validator}) {
+    return Container(
+      margin: const EdgeInsets.symmetric(vertical: 12),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(12),
+      ),
+      padding: const EdgeInsets.symmetric(
+        horizontal: 16,
+        vertical: 10,
+      ),
+      child: TextFormField(
+        keyboardType: keyboardType,
+        initialValue: initialValue,
+        style: const TextStyle(fontSize: 14),
         obscureText: !(obscureText == null),
         decoration: InputDecoration.collapsed(
           hintText: hintText,
@@ -182,192 +379,8 @@ class _UserProfileState extends State<UserProfile> {
             fontSize: 14,
           ),
         ),
+        validator: validator,
       ),
-    );
-  }
-
-  _bottom() {
-    return [
-      const Text(
-        "Cambiar contraseña",
-        style: TextStyle(
-          fontWeight: FontWeight.bold,
-          fontSize: 24,
-        ),
-      ),
-      TextFormField(
-        keyboardType: TextInputType.number,
-        controller: numberPhoneController,
-        decoration: const InputDecoration(
-            labelText: "Ingrese su numero de celular", icon: Icon(Icons.phone)),
-      ),
-    ];
-  }
-
-  Widget _top() {
-    String dropdownValue = 'Salta';
-    return Column(
-      children: [
-        Column(
-          children: [
-            Row(
-              children: const [
-                Padding(
-                  padding: EdgeInsets.symmetric(vertical: 8.0),
-                  child: Text(
-                    "Editar perfil",
-                    style: TextStyle(fontSize: 16),
-                  ),
-                ),
-              ],
-            ),
-            Row(
-              children: [
-                Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 8.0),
-                  child: Text(
-                    "Nombre y apellido",
-                    style: TextStyle(color: Colors.grey.shade800),
-                  ),
-                ),
-              ],
-            ),
-          ],
-        ),
-        TextFormField(
-          controller: nameAndSurnameController,
-          decoration: InputDecoration(
-              enabledBorder: const OutlineInputBorder(),
-              hintText:
-                  (widget.model?.name != null && widget.model?.surname != null)
-                      ? '${widget.model!.name} ${widget.model!.surname}'
-                      : 'Nombre y apellido'),
-        ),
-        Row(
-          children: [
-            Padding(
-              padding: const EdgeInsets.symmetric(vertical: 8.0),
-              child:
-                  Text("Email", style: TextStyle(color: Colors.grey.shade800)),
-            ),
-          ],
-        ),
-        TextFormField(
-          controller: emailController,
-          keyboardType: TextInputType.emailAddress,
-          validator: (email) {
-            if (email == null || email.isEmpty) {
-              return 'E-mail es requerido';
-            }
-            String pattern = r'\w+@\w+\.\w+';
-            RegExp regex = RegExp(pattern);
-            if (!regex.hasMatch(email)) return 'Formato Incorrecto de E-mail';
-            return null;
-          },
-          decoration: InputDecoration(
-            enabledBorder: const OutlineInputBorder(),
-            hintText: widget.model?.email ?? 'Email',
-          ),
-        ),
-        Row(
-          children: [
-            Padding(
-              padding: const EdgeInsets.symmetric(vertical: 8.0),
-              child: Text("DNI", style: TextStyle(color: Colors.grey.shade800)),
-            ),
-          ],
-        ),
-        TextFormField(
-          controller: dniController,
-          keyboardType: TextInputType.number,
-          validator: (dni) {
-            if (dni == null || dni.isEmpty) {
-              return 'DNI requerido';
-            } else if (dni.length < 10) {
-              return 'DNI incorrecto';
-            }
-            return null;
-          },
-          decoration: InputDecoration(
-            enabledBorder: const OutlineInputBorder(),
-            hintText: widget.model?.dni.toString() ?? 'DNI',
-          ),
-        ),
-        Row(
-          children: [
-            Padding(
-              padding: const EdgeInsets.symmetric(vertical: 8.0),
-              child: Text("Localidad",
-                  style: TextStyle(color: Colors.grey.shade800)),
-            ),
-          ],
-        ),
-        DropdownButtonFormField(
-          icon: const Icon(Icons.arrow_drop_down_sharp),
-          value: dropdownValue,
-          onChanged: (String? newValue) {
-            setState(() {
-              dropdownValue = newValue!;
-            });
-          },
-          items: locationList.map<DropdownMenuItem<String>>((String value) {
-            return DropdownMenuItem<String>(
-              value: value,
-              child: Text(
-                value,
-                style: const TextStyle(fontSize: 20),
-              ),
-            );
-          }).toList(),
-        )
-      ],
     );
   }
 }
-/*
-/*
-            Container(
-              margin: const EdgeInsets.symmetric(vertical: 12),
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(12),
-              ),
-              padding: const EdgeInsets.symmetric(
-                horizontal: 16,
-                vertical: 10,
-              ),
-              child: TextFormField(
-                keyboardType: TextInputType.text,
-                obscureText: true,
-                ///
-                decoration: const InputDecoration.collapsed(
-                  hintText: "Nueva contraseña",
-                  hintStyle: TextStyle(
-                    fontWeight: FontWeight.w500,
-                    fontSize: 14,
-                  ),
-                ),
-                ///
-                decoration: InputDecoration(
-                  isCollapsed: true,
-                  contentPadding: EdgeInsets.zero,
-                  border: InputBorder.none,
-                  hintText: "Nueva contraseña",
-                  hintStyle: const TextStyle(
-                    fontWeight: FontWeight.w500,
-                    fontSize: 14,
-                  ),
-                  suffixIcon: SizedBox(
-                    width: 52,
-                    child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: const [
-                          Icon(Icons.info_outline),
-                          Icon(Icons.remove_red_eye_outlined),
-                        ]),
-                  ),
-                ),
-              ),
-            ),
-            */
- */
