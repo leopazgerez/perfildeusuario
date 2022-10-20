@@ -24,6 +24,47 @@ class _UserProfileState extends State<UserProfile> {
     'Quebrachal',
     'Metan'
   ];
+<<<<<<< Updated upstream
+=======
+  String dropDownValue = '';
+
+  final GlobalKey<FormState> formKey = GlobalKey<FormState>();
+  bool isTapIcon = true;
+  bool iconEyeNewPassword = false;
+  bool iconEyeConfirmPassword = false;
+
+  isTapIconf() {
+    isTapIcon = !isTapIcon;
+  }
+
+  isTapIconEyeNewPassword() {
+    iconEyeNewPassword = !iconEyeNewPassword;
+  }
+
+  isTapIconEyeConfirmPassword() {
+    iconEyeConfirmPassword = !iconEyeConfirmPassword;
+  }
+
+  String? emailValidator(email) {
+    if (email == null || email.isEmpty) {
+      return 'E-mail es requerido';
+    }
+    String pattern = r'\w+@\w+\.\w+';
+    RegExp regex = RegExp(pattern);
+    if (!regex.hasMatch(email)) return 'Formato Incorrecto de E-mail';
+    return null;
+  }
+
+  String? dniValidator(dni) {
+    if (dni == null || dni.isEmpty) {
+      return 'DNI es requerido';
+    } else if (dni.length > 9 && dni.length < 12) {
+      return 'DNI es incorrecto';
+    }
+    return null;
+  }
+
+>>>>>>> Stashed changes
   @override
   Widget build(BuildContext context) {
     GlobalKey<FormState> formKey = GlobalKey<FormState>();
@@ -42,8 +83,14 @@ class _UserProfileState extends State<UserProfile> {
                 style: TextStyle(fontSize: 16),
               ),
             ),
+<<<<<<< Updated upstream
             _titleTextForm("Nombre y apellido"),
             _textFormField(nameAndSurname, "Nombre y apellido"),
+=======
+            _customTitleTextForm(title: "Nombre y apellido"),
+            _customTextFormField(
+                hintText: "Nombre y apellido", initialValue: '${widget.model!.name} ${widget.model!.surname}'),
+>>>>>>> Stashed changes
             _titleTextForm("Email"),
             Container(
               margin: const EdgeInsets.symmetric(vertical: 12),
@@ -58,6 +105,7 @@ class _UserProfileState extends State<UserProfile> {
               child:TextFormField(
                 controller: emailController,
                 keyboardType: TextInputType.emailAddress,
+<<<<<<< Updated upstream
                 validator: (email) {
                   if (email == null || email.isEmpty) {
                     return 'E-mail es requerido';
@@ -146,6 +194,29 @@ class _UserProfileState extends State<UserProfile> {
             ),
             _titleTextForm("Celular"),
             _textFormField(numberPhone, "387678953.."),
+=======
+                initialValue: widget.model!.email,
+                validator: emailValidator,
+            ),
+            /*
+            _textFormField(email, "Email", TextInputType.emailAddress,
+                validator: (email) {
+              if (email == null || email.isEmpty) {
+                return 'E-mail es requerido';
+              }
+              String pattern = r'\w+@\w+\.\w+';
+              RegExp regex = RegExp(pattern);
+              if (!regex.hasMatch(email)) return 'Formato Incorrecto de E-mail';
+              return null;
+            }),
+            */
+            _customTitleTextForm(title: "DNI"),
+            _customTextFormField(initialValue: widget.model!.dni.toString() ,hintText: "9.955.976.."),
+            _titleTextForm("Localidad"),
+            _customDropDownButton(locationList),
+            _titleTextForm("Celular"),
+            _textFormField(widget.model!.phoneNumber.toString(), "387678953..", TextInputType.number),
+>>>>>>> Stashed changes
             _titleTextForm("Cambiar contraseña"),
             _textFormField("","Nueva contraseña"),
             Container(
@@ -390,5 +461,48 @@ class _UserProfileState extends State<UserProfile> {
         )
       ],
     );
+<<<<<<< Updated upstream
   }*/
 }
+=======
+  }
+  Widget _customDropDownButton(List<String> list){
+    return Container(
+      margin: const EdgeInsets.symmetric(vertical: 12),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(12),
+      ),
+      padding: const EdgeInsets.symmetric(
+        horizontal: 16,
+        vertical: 8,
+      ),
+      child: DropdownButtonFormField(
+        borderRadius: BorderRadius.circular(12),
+        decoration: const InputDecoration.collapsed(
+            hintText: 'hit'
+        ),
+        icon: const Icon(Icons.arrow_drop_down_sharp),
+        value: list.first,
+        onChanged: (String? newValue) {
+          setState(() {
+            dropDownValue = newValue!;
+          });
+        },
+        items: list.map<DropdownMenuItem<String>>((String value) {
+          return DropdownMenuItem<String>(
+            value: value,
+            child: Padding(
+              padding: EdgeInsets.zero,
+              child: Text(
+                value,
+                style: const TextStyle(fontSize: 14),
+              ),
+            ),
+          );
+        }).toList(),
+      ),
+    );
+  }
+}
+>>>>>>> Stashed changes
