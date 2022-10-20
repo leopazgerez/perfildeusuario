@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:perfildeusuario/src/models/person_model.dart';
+import 'package:perfildeusuario/src/ui/pagecomponent/custom_button.dart';
 
 class UserProfile extends StatefulWidget {
   final PersonModel? model;
@@ -149,7 +150,12 @@ class _UserProfileState extends State<UserProfile> {
       ],
     );
   }
-
+  _button(){
+    return CustomButton(
+        text: "Guardar",
+      backgroundColor: const Color(0xFF0000CC),
+    );
+  }
   Widget _bottom() {
     return Container();
   }
