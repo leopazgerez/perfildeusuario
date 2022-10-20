@@ -150,14 +150,24 @@ class _UserProfileState extends State<UserProfile> {
     });
   }
 
-  @override
-  Widget build(BuildContext context) {
-    bool isEnabledButton = isEnabledA &&
+  bool isEnabledBotoN(){
+    return isEnabledA &&
         isEnabledB &&
         isEnabledC &&
         isEnabledD &&
         isEnabledE &&
         isEnabledF;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    TextEditingController confirmPasswordController = TextEditingController();
+  TextEditingController nameAndSurnameController = TextEditingController(text: "${widget.model!.name} ${widget.model!.surname}");
+  TextEditingController newPasswordController = TextEditingController();
+  TextEditingController emailController = TextEditingController(text: widget.model!.email);
+  TextEditingController dniController = TextEditingController(text: widget.model!.dni.toString());
+  TextEditingController phoneController = TextEditingController(text:  widget.model!.phoneNumber.toString());
+    bool isEnabledButton = isEnabledBotoN();
     return Form(
       key: formKey,
       child: Column(
