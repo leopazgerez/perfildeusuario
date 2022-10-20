@@ -17,6 +17,7 @@ class _UserProfileState extends State<UserProfile> {
   TextEditingController nameAndSurnameController = TextEditingController();
   TextEditingController emailController = TextEditingController();
   TextEditingController dniController = TextEditingController();
+  String dropdownValue = 'Salta';
   List<String> locationList = [
     'Salta',
     'Joaquin V. Gonzalez',
@@ -26,7 +27,7 @@ class _UserProfileState extends State<UserProfile> {
   @override
   Widget build(BuildContext context) {
     GlobalKey<FormState> formKey = GlobalKey<FormState>();
-    String dropdownValue = 'Salta';
+
     return Form(
       key: formKey,
       child: Padding(
@@ -136,7 +137,7 @@ class _UserProfileState extends State<UserProfile> {
                       padding: EdgeInsets.zero,
                       child: Text(
                         value,
-                        style: const TextStyle(fontSize: 18),
+                        style: const TextStyle(fontSize: 14),
                       ),
                     ),
                   );
