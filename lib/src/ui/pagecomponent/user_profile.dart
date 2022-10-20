@@ -107,23 +107,40 @@ class _UserProfileState extends State<UserProfile> {
               ),
             ),
             _titleTextForm("Localidad"),
-            DropdownButtonFormField(
-              icon: const Icon(Icons.arrow_drop_down_sharp),
-              value: dropdownValue,
-              onChanged: (String? newValue) {
-                setState(() {
-                  dropdownValue = newValue!;
-                });
-              },
-              items: locationList.map<DropdownMenuItem<String>>((String value) {
-                return DropdownMenuItem<String>(
-                  value: value,
-                  child: Text(
-                    value,
-                    style: const TextStyle(fontSize: 20),
-                  ),
-                );
-              }).toList(),
+            Container(
+              margin: const EdgeInsets.symmetric(vertical: 12),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(12),
+              ),
+              padding: const EdgeInsets.symmetric(
+                horizontal: 16,
+                vertical: 8,
+              ),
+              child: DropdownButtonFormField(
+                decoration: const InputDecoration.collapsed(
+                    hintText: 'hit'
+                ),
+                icon: const Icon(Icons.arrow_drop_down_sharp),
+                value: dropdownValue,
+                onChanged: (String? newValue) {
+                  setState(() {
+                    dropdownValue = newValue!;
+                  });
+                },
+                items: locationList.map<DropdownMenuItem<String>>((String value) {
+                  return DropdownMenuItem<String>(
+                    value: value,
+                    child: Padding(
+                      padding: EdgeInsets.zero,
+                      child: Text(
+                        value,
+                        style: const TextStyle(fontSize: 18),
+                      ),
+                    ),
+                  );
+                }).toList(),
+              ),
             ),
             _titleTextForm("Celular"),
             _textFormField(numberPhone, "387678953.."),
@@ -221,6 +238,7 @@ class _UserProfileState extends State<UserProfile> {
       ),
       child: TextFormField(
         keyboardType: TextInputType.number,
+        style: const TextStyle(fontSize: 14),
         initialValue: initialValue,
         obscureText: !(obscureText == null),
         decoration: InputDecoration.collapsed(
