@@ -26,6 +26,7 @@ class _UserProfileState extends State<UserProfile> {
   @override
   Widget build(BuildContext context) {
     GlobalKey<FormState> formKey = GlobalKey<FormState>();
+    String dropdownValue = 'Salta';
     return Form(
       key: formKey,
       child: Padding(
@@ -94,28 +95,24 @@ class _UserProfileState extends State<UserProfile> {
                 ),
               ),
             ),
-            Row(
-              children: [
-                _titleTextForm("Localidad"),
-                DropdownButtonFormField(
-                  icon: const Icon(Icons.arrow_drop_down_sharp),
-                  value: dropdownValue,
-                  onChanged: (String? newValue) {
-                    setState(() {
-                      dropdownValue = newValue!;
-                    });
-                  },
-                  items: locationList.map<DropdownMenuItem<String>>((String value) {
-                    return DropdownMenuItem<String>(
-                      value: value,
-                      child: Text(
-                        value,
-                        style: const TextStyle(fontSize: 20),
-                      ),
-                    );
-                  }).toList(),
-                )
-              ],
+            _titleTextForm("Localidad"),
+            DropdownButtonFormField(
+              icon: const Icon(Icons.arrow_drop_down_sharp),
+              value: dropdownValue,
+              onChanged: (String? newValue) {
+                setState(() {
+                  dropdownValue = newValue!;
+                });
+              },
+              items: locationList.map<DropdownMenuItem<String>>((String value) {
+                return DropdownMenuItem<String>(
+                  value: value,
+                  child: Text(
+                    value,
+                    style: const TextStyle(fontSize: 20),
+                  ),
+                );
+              }).toList(),
             ),
             _titleTextForm("Celular"),
             _textFormField(numberPhone, "387678953.."),
@@ -243,7 +240,7 @@ class _UserProfileState extends State<UserProfile> {
       ),
     ];
   }
-  /*
+/*
   Widget _top() {
     String dropdownValue = 'Salta';
     return Column(
