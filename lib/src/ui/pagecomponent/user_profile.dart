@@ -34,8 +34,13 @@ class _UserProfileState extends State<UserProfile> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            //_top(),
-            //_bottom(),
+            const Padding(
+              padding: EdgeInsets.symmetric(vertical: 10.0),
+              child: Text(
+                "Editar perfil",
+                style: TextStyle(fontSize: 16),
+              ),
+            ),
             _titleTextForm("Nombre y apellido"),
             _textFormField(nameAndSurname, "Nombre y apellido"),
             _titleTextForm("Email"),
