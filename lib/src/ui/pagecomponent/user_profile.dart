@@ -152,17 +152,17 @@ class _UserProfileState extends State<UserProfile> {
 
   @override
   Widget build(BuildContext context) {
-    bool isEnabledButton = isEnabledA && isEnabledB && isEnabledC && isEnabledD && isEnabledE && isEnabledF;
+    bool isEnabledButton = isEnabledA &&
+        isEnabledB &&
+        isEnabledC &&
+        isEnabledD &&
+        isEnabledE &&
+        isEnabledF;
     return Form(
       key: formKey,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          FloatingActionButton(onPressed: (){
-            setState(() {
-              
-            });
-          }),
           Padding(
             padding: const EdgeInsets.symmetric(vertical: 10),
             child: _customTitleTextForm(
@@ -235,16 +235,15 @@ class _UserProfileState extends State<UserProfile> {
     );
   }
 
-  Widget _customButton({
-    String? text = "",
-    Color? backgroundColor = const Color(0xFF0000FF),
-    double? height = 30,
-    double? width = 200,
-    double? textSize = 20,
-    FontWeight? textWeight = FontWeight.w500,
-    double? letterSpacing = 3,
-    bool? isEnabledButton = false
-  }) {
+  Widget _customButton(
+      {String? text = "",
+      Color? backgroundColor = const Color(0xFF0000FF),
+      double? height = 30,
+      double? width = 200,
+      double? textSize = 20,
+      FontWeight? textWeight = FontWeight.w500,
+      double? letterSpacing = 3,
+      bool? isEnabledButton = false}) {
     print("boton $isEnabledButton");
     return Center(
       child: Container(
@@ -253,19 +252,17 @@ class _UserProfileState extends State<UserProfile> {
           width: width!,
           text: text!,
           onTap: () {
-                  setState(() {
-                    if (formKey.currentState!.validate()) {
-                      // isEnabled = true;
-                      print("OOOOOK");
-                    } else {
-                      // isEnabled = false;
-                      print("Noooo OK");
-                    }
-                  }
-                  );
-                }
-              ,
-              isEnabled: isEnabledButton!,
+            setState(() {
+              if (formKey.currentState!.validate()) {
+                // isEnabled = true;
+                print("OOOOOK");
+              } else {
+                // isEnabled = false;
+                print("Noooo OK");
+              }
+            });
+          },
+          isEnabled: isEnabledButton!,
           backgroundColor: backgroundColor!,
           height: height!,
           textSize: textSize!,
@@ -320,11 +317,11 @@ class _UserProfileState extends State<UserProfile> {
       child: Row(children: [
         Expanded(
           child: TextFormField(
-            onChanged: (text){
-          setState(() {
-            //print("campo $text");
-          });
-        },
+            onChanged: (text) {
+              setState(() {
+                //print("campo $text");
+              });
+            },
             validator: validator,
             controller: controller,
             initialValue: initialValue,
@@ -388,7 +385,7 @@ class _UserProfileState extends State<UserProfile> {
         vertical: 10,
       ),
       child: TextFormField(
-        onChanged: (text){
+        onChanged: (text) {
           setState(() {
             //print("campo $text");
           });
