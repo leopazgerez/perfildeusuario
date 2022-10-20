@@ -16,10 +16,12 @@ class View extends StatelessWidget {
     );
   }
   Widget _body(){
-    return Column(
-      children: const [
-        UserProfile(),
-      ],
+    return SingleChildScrollView(
+      child: Column(
+        children: const [
+          UserProfile(),
+        ],
+      ),
     );
   }
 }
