@@ -4,24 +4,29 @@ import 'package:perfildeusuario/src/ui/pagecomponent/user_profile.dart';
 
 class View extends StatelessWidget {
   final String id = "view";
-  const View({Key? key}) : super(key: key);
+  View({Key? key}) : super(key: key);
+  
+  final PersonModel personaNN = PersonModel('name', 'surname', 'example@gmail.com', 25789645, 'location', 2874125478);
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.grey.shade300,
       appBar: AppBar(
-        title: const Text("Vista"),
+        title: const Text("Vista con el widget Formulario"),
       ),
       body: _body(),
     );
   }
   Widget _body(){
-    return SingleChildScrollView(
-      child: Column(
-        children: const [
-          UserProfile(),
-        ],
+    return Padding(
+      padding: const EdgeInsets.all(20),
+      child: SingleChildScrollView(
+        child: Column(
+          children: [
+            UserProfile(model: personaNN),
+          ],
+        ),
       ),
     );
   }
