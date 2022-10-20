@@ -22,50 +22,59 @@ class _UserProfileState extends State<UserProfile> {
   final double paddingHorizontal = 16;
   final double borderRadiusTextForm = 12;
   final double sizeTextForm = 14;
-  bool isEnabled = false;
+  bool isEnabledA = false;
+  bool isEnabledB = false;
+  bool isEnabledC = false;
+  bool isEnabledD = false;
+  bool isEnabledE = false;
+  bool isEnabledF = false;
+  bool isEnabledG = false;
   String dropDownValue = '';
   bool iconEyeNewPassword = false;
   bool iconEyeConfirmPassword = false;
 
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
 
-  TextEditingController newPasswordController = TextEditingController();
   TextEditingController confirmPasswordController = TextEditingController();
   TextEditingController nameAndSurnameController = TextEditingController();
+  TextEditingController newPasswordController = TextEditingController();
   TextEditingController emailController = TextEditingController();
   TextEditingController dniController = TextEditingController();
   TextEditingController phoneController = TextEditingController();
 
-@override
-void initState(){
-  super.initState();
-  newPasswordController.addListener(() {
-    isEnabled = newPasswordController.text.isNotEmpty;
-  });
-  confirmPasswordController.addListener(() {
-    isEnabled = confirmPasswordController.text.isNotEmpty;
-  });
-  nameAndSurnameController.addListener(() {
-    isEnabled = nameAndSurnameController.text.isNotEmpty;
-  });
-  emailController.addListener(() {
-    isEnabled = emailController.text.isNotEmpty;
-  });
-  dniController.addListener(() {
-    isEnabled = dniController.text.isNotEmpty;
-  });
-  phoneController.addListener(() {
-    isEnabled = phoneController.text.isNotEmpty;
-  });
-}
-@override
-void dispose(){
-  nameAndSurnameController.dispose();
-  emailController.dispose();
-  dniController.dispose();
-  phoneController.dispose();
-  newPasswordController.dispose();
-}
+  @override
+  void initState() {
+    super.initState();
+    nameAndSurnameController.addListener(() {
+      isEnabledA = nameAndSurnameController.text.isNotEmpty;
+    });
+    emailController.addListener(() {
+      isEnabledB = emailController.text.isNotEmpty;
+    });
+    dniController.addListener(() {
+      isEnabledC = dniController.text.isNotEmpty;
+    });
+    phoneController.addListener(() {
+      isEnabledD = phoneController.text.isNotEmpty;
+    });
+    newPasswordController.addListener(() {
+      isEnabledE = newPasswordController.text.isNotEmpty;
+    });
+    confirmPasswordController.addListener(() {
+      isEnabledF = confirmPasswordController.text.isNotEmpty;
+    });
+  }
+
+  @override
+  void dispose() {
+    nameAndSurnameController.dispose();
+    emailController.dispose();
+    dniController.dispose();
+    phoneController.dispose();
+    newPasswordController.dispose();
+    confirmPasswordController.dispose();
+  }
+
   isTapIconEyeNewPassword() {
     iconEyeNewPassword = !iconEyeNewPassword;
   }
@@ -143,11 +152,17 @@ void dispose(){
 
   @override
   Widget build(BuildContext context) {
+    bool isEnabledButton = isEnabledA && isEnabledB && isEnabledC && isEnabledD && isEnabledE && isEnabledF;
     return Form(
       key: formKey,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          FloatingActionButton(onPressed: (){
+            setState(() {
+              
+            });
+          }),
           Padding(
             padding: const EdgeInsets.symmetric(vertical: 10),
             child: _customTitleTextForm(
@@ -157,10 +172,10 @@ void dispose(){
           ),
           _customTitleTextForm(title: "Nombre y apellido"),
           _customTextFormField(
-            controller: nameAndSurnameController,
+              controller: nameAndSurnameController,
               hintText: "Adoración Rosa...",
               // initialValue: "${widget.model!.name} ${widget.model!.surname}",
-          validator: nameValidator),
+              validator: nameValidator),
           _customTitleTextForm(title: "Email"),
           _customTextFormField(
             controller: emailController,
@@ -171,7 +186,7 @@ void dispose(){
           ),
           _customTitleTextForm(title: "DNI"),
           _customTextFormField(
-            controller: dniController,
+              controller: dniController,
               hintText: "9.955.976...",
               // initialValue: widget.model!.dni.toString(),
               keyboardType: TextInputType.number,
@@ -180,7 +195,7 @@ void dispose(){
           _customDropDownButton(locationList, widget.model!.location),
           _customTitleTextForm(title: "Celular"),
           _customTextFormField(
-            controller: phoneController,
+              controller: phoneController,
               hintText: "387678953...",
               // initialValue: widget.model!.phoneNumber.toString(),
               keyboardType: TextInputType.number),
@@ -207,12 +222,13 @@ void dispose(){
           ),
           _customButton(
             text: "Guardar",
-            backgroundColor: isEnabled ? const Color(0xFF0000CC) : Colors.grey,
+            backgroundColor: isEnabledA ? const Color(0xFF0000CC) : Colors.grey,
             height: 36,
             width: 300,
             textSize: 16,
             textWeight: FontWeight.w500,
             letterSpacing: 1,
+            isEnabledButton: isEnabledButton,
           ),
         ],
       ),
@@ -227,25 +243,29 @@ void dispose(){
     double? textSize = 20,
     FontWeight? textWeight = FontWeight.w500,
     double? letterSpacing = 3,
+    bool? isEnabledButton = false
   }) {
+    print("boton $isEnabledButton");
     return Center(
       child: Container(
         margin: const EdgeInsets.only(top: 20),
         child: CustomButton(
           width: width!,
           text: text!,
-          onTap: isEnabled ? () {
-            setState(() {
-              isEnabled = true;
-              if (formKey.currentState!.validate()) {
-                // isEnabled = true;
-                print("OOOOOK");
-              } else {
-                // isEnabled = false;
-                print("Noooo OK");
-              }
-            });
-          } : null,
+          onTap: () {
+                  setState(() {
+                    if (formKey.currentState!.validate()) {
+                      // isEnabled = true;
+                      print("OOOOOK");
+                    } else {
+                      // isEnabled = false;
+                      print("Noooo OK");
+                    }
+                  }
+                  );
+                }
+              ,
+              isEnabled: isEnabledButton!,
           backgroundColor: backgroundColor!,
           height: height!,
           textSize: textSize!,
@@ -300,6 +320,11 @@ void dispose(){
       child: Row(children: [
         Expanded(
           child: TextFormField(
+            onChanged: (text){
+          setState(() {
+            //print("campo $text");
+          });
+        },
             validator: validator,
             controller: controller,
             initialValue: initialValue,
@@ -363,6 +388,11 @@ void dispose(){
         vertical: 10,
       ),
       child: TextFormField(
+        onChanged: (text){
+          setState(() {
+            //print("campo $text");
+          });
+        },
         controller: controller,
         keyboardType: keyboardType,
         initialValue: initialValue,
@@ -399,6 +429,7 @@ void dispose(){
             "Cachi", //currenhtLocation // algoo como list.elementAt(list.getIndexOf(currenhtLocation))
         onChanged: (String? newValue) {
           setState(() {
+            //print("campo $newValue");
             dropDownValue = newValue!;
           });
         },
