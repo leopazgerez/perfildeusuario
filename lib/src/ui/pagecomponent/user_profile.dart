@@ -61,9 +61,12 @@ class _UserProfileState extends State<UserProfile> {
                   if (!regex.hasMatch(email)) return 'Formato Incorrecto de E-mail';
                   return null;
                 },
-                decoration: InputDecoration(
-                  enabledBorder: const OutlineInputBorder(),
-                  hintText: widget.model?.email ?? 'Email',
+                decoration: const InputDecoration.collapsed(
+                  hintText: 'Email',
+                  hintStyle: TextStyle(
+                    fontWeight: FontWeight.w500,
+                    fontSize: 14,
+                  ),
                 ),
               ),
             ),
@@ -89,9 +92,12 @@ class _UserProfileState extends State<UserProfile> {
                   }
                   return null;
                 },
-                decoration: InputDecoration(
-                  enabledBorder: const OutlineInputBorder(),
-                  hintText: widget.model?.dni.toString() ?? 'DNI',
+                decoration: const InputDecoration.collapsed(
+                  hintText: 'DNI',
+                  hintStyle: TextStyle(
+                    fontWeight: FontWeight.w500,
+                    fontSize: 14,
+                  ),
                 ),
               ),
             ),
