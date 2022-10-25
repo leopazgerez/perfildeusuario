@@ -6,7 +6,7 @@ class View extends StatelessWidget {
   final String id = "view";
   View({Key? key}) : super(key: key);
   
-  final PersonModel personaNN = PersonModel('Benito', 'Rodriguez', 'bcamela@gmail.com', 25789645, 'Localidad', 2874125478);
+  final PersonModel personaNN = PersonModel('Benito', 'Camela', 'bcamela@gmail.com', 8008135, 'Localidad', 2874125478);
 
   @override
   Widget build(BuildContext context) {

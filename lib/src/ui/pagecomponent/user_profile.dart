@@ -39,7 +39,7 @@ class _UserProfileState extends State<UserProfile> {
   @override
   void initState() {
     super.initState();
-    nameAndSurnameController.text = (widget.model!.name) + (widget.model!.surname);
+    nameAndSurnameController.text = ('${widget.model!.name}${widget.model!.surname}');
     emailController.text = widget.model!.email;
     dniController.text = widget.model!.dni.toString();
     phoneController.text = widget.model!.phoneNumber.toString();
