@@ -22,13 +22,6 @@ class _UserProfileState extends State<UserProfile> {
   final double paddingHorizontal = 16;
   final double borderRadiusTextForm = 12;
   final double sizeTextForm = 14;
-  bool isEnabledA = false;
-  bool isEnabledB = false;
-  bool isEnabledC = false;
-  bool isEnabledD = false;
-  bool isEnabledE = false;
-  bool isEnabledF = false;
-  bool isEnabledG = false;
   String dropDownValue = '';
   bool iconEyeNewPassword = false;
   bool iconEyeConfirmPassword = false;
@@ -41,32 +34,40 @@ class _UserProfileState extends State<UserProfile> {
   TextEditingController emailController = TextEditingController();
   TextEditingController dniController = TextEditingController();
   TextEditingController phoneController = TextEditingController();
+  bool isEnabled = false;
 
   @override
   void initState() {
     super.initState();
-    nameAndSurnameController.addListener(() {
-      isEnabledA = nameAndSurnameController.text.isNotEmpty;
-    });
-    emailController.addListener(() {
-      isEnabledB = emailController.text.isNotEmpty;
-    });
-    dniController.addListener(() {
-      isEnabledC = dniController.text.isNotEmpty;
-    });
-    phoneController.addListener(() {
-      isEnabledD = phoneController.text.isNotEmpty;
-    });
-    newPasswordController.addListener(() {
-      isEnabledE = newPasswordController.text.isNotEmpty;
-    });
-    confirmPasswordController.addListener(() {
-      isEnabledF = confirmPasswordController.text.isNotEmpty;
-    });
+    nameAndSurnameController.text = (widget.model!.name) + (widget.model!.surname);
+    emailController.text = widget.model!.email;
+    dniController.text = widget.model!.dni.toString();
+    phoneController.text = widget.model!.phoneNumber.toString();
+    nameAndSurnameController.addListener(() {});
+    emailController.addListener(() {});
+    dniController.addListener(() {});
+    phoneController.addListener(() {});
+    newPasswordController.addListener(() {});
+    confirmPasswordController.addListener(() {});
+  }
+  @override
+  void setState(VoidCallback fn) {
+    if(nameAndSurnameController.text.isNotEmpty &&
+        emailController.text.isNotEmpty &&
+        dniController.text.isNotEmpty &&
+        phoneController.text.isNotEmpty &&
+        newPasswordController.text.isNotEmpty &&
+        confirmPasswordController.text.isNotEmpty) {
+      isEnabled = true;
+    }else{
+      isEnabled = false;
+    }
+    super.setState(fn);
   }
 
   @override
   void dispose() {
+    super.dispose();
     nameAndSurnameController.dispose();
     emailController.dispose();
     dniController.dispose();
@@ -150,24 +151,9 @@ class _UserProfileState extends State<UserProfile> {
     });
   }
 
-  bool isEnabledBotoN(){
-    return isEnabledA &&
-        isEnabledB &&
-        isEnabledC &&
-        isEnabledD &&
-        isEnabledE &&
-        isEnabledF;
-  }
 
   @override
   Widget build(BuildContext context) {
-    TextEditingController confirmPasswordController = TextEditingController();
-  TextEditingController nameAndSurnameController = TextEditingController(text: "${widget.model!.name} ${widget.model!.surname}");
-  TextEditingController newPasswordController = TextEditingController();
-  TextEditingController emailController = TextEditingController(text: widget.model!.email);
-  TextEditingController dniController = TextEditingController(text: widget.model!.dni.toString());
-  TextEditingController phoneController = TextEditingController(text:  widget.model!.phoneNumber.toString());
-    bool isEnabledButton = isEnabledBotoN();
     return Form(
       key: formKey,
       child: Column(
@@ -184,7 +170,7 @@ class _UserProfileState extends State<UserProfile> {
           _customTextFormField(
               controller: nameAndSurnameController,
               hintText: "Adoración Rosa...",
-              // initialValue: "${widget.model!.name} ${widget.model!.surname}",
+              // initialValue: nameAndSurnameController.text,
               validator: nameValidator),
           _customTitleTextForm(title: "Email"),
           _customTextFormField(
@@ -232,13 +218,12 @@ class _UserProfileState extends State<UserProfile> {
           ),
           _customButton(
             text: "Guardar",
-            backgroundColor: isEnabledA ? const Color(0xFF0000CC) : Colors.grey,
+            backgroundColor: const Color(0xFF0000CC),
             height: 36,
             width: 300,
             textSize: 16,
             textWeight: FontWeight.w500,
             letterSpacing: 1,
-            isEnabledButton: isEnabledButton,
           ),
         ],
       ),
@@ -253,26 +238,23 @@ class _UserProfileState extends State<UserProfile> {
       double? textSize = 20,
       FontWeight? textWeight = FontWeight.w500,
       double? letterSpacing = 3,
-      bool? isEnabledButton = false}) {
-    print("boton $isEnabledButton");
+      }) {
     return Center(
       child: Container(
         margin: const EdgeInsets.only(top: 20),
         child: CustomButton(
+          isEnabled: isEnabled,
           width: width!,
           text: text!,
-          onTap: () {
+          onTap: isEnabled ? () {
             setState(() {
               if (formKey.currentState!.validate()) {
-                // isEnabled = true;
                 print("OOOOOK");
               } else {
-                // isEnabled = false;
                 print("Noooo OK");
               }
             });
-          },
-          isEnabled: isEnabledButton!,
+          } : null,
           backgroundColor: backgroundColor!,
           height: height!,
           textSize: textSize!,
@@ -395,9 +377,9 @@ class _UserProfileState extends State<UserProfile> {
         vertical: 10,
       ),
       child: TextFormField(
+        autovalidateMode: AutovalidateMode.onUserInteraction,
         onChanged: (text) {
           setState(() {
-            //print("campo $text");
           });
         },
         controller: controller,
@@ -417,7 +399,7 @@ class _UserProfileState extends State<UserProfile> {
     );
   }
 
-  Widget _customDropDownButton(List<String> list, String currenhtLocation) {
+  Widget _customDropDownButton(List<String> list, String currentLocation) {
     return Container(
       margin: const EdgeInsets.symmetric(vertical: 12),
       decoration: BoxDecoration(
