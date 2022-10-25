@@ -39,7 +39,7 @@ class _UserProfileState extends State<UserProfile> {
   @override
   void initState() {
     super.initState();
-    nameAndSurnameController.text = ('${widget.model!.name}${widget.model!.surname}');
+    nameAndSurnameController.text = ('${widget.model!.name} ${widget.model!.surname}');
     emailController.text = widget.model!.email;
     dniController.text = widget.model!.dni.toString();
     phoneController.text = widget.model!.phoneNumber.toString();
@@ -99,6 +99,15 @@ class _UserProfileState extends State<UserProfile> {
       return 'DNI es requerido';
     } else if (dni.length > 9 && dni.length < 12) {
       return 'DNI es incorrecto';
+    }
+    return null;
+  }
+
+  String? phoneValidator(phone) {
+    if (phone == null || phone.isEmpty) {
+      return 'Numero de celular es requerido';
+    } else if (phone.length > 10 && phone.length < 13){
+        return 'Numero incorrecto';
     }
     return null;
   }
@@ -193,7 +202,7 @@ class _UserProfileState extends State<UserProfile> {
           _customTextFormField(
               controller: phoneController,
               hintText: "387678953...",
-              // initialValue: widget.model!.phoneNumber.toString(),
+              validator: phoneValidator,
               keyboardType: TextInputType.number),
           _customTitleTextForm(title: "Cambiar contraseña"),
           _customTextFormFieldWithIcons(
