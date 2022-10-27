@@ -5,16 +5,15 @@ class PersonModel{
   int? _dni;
   String? _location;
   int? _phoneNumber;
-  String? _password;
+  String? password;
 
-  PersonModel(String name, String surname, String email, int dni, String location, int phoneNumber, String password,){
+  PersonModel(String name, String surname, String email, int dni, String location, int phoneNumber,{this.password}){
     _name = name;
     _surname = surname;
     _email = email;
     _dni = dni;
     _location = location;
     _phoneNumber = phoneNumber;
-    _password = password;
   }
 
   String get name => _name!;
@@ -40,10 +39,6 @@ class PersonModel{
   int get phoneNumber => _phoneNumber!;
   set phoneNumber(int phoneNumber){
     _phoneNumber = phoneNumber;
-  }
-  String get password => _password!;
-  set password(String password){
-    _password = password;
   }
 
 }
